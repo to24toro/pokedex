@@ -43,10 +43,11 @@ pub fn execute(repo: Arc<dyn Repository>, req: Request) -> Result<Response, Erro
 #[cfg(test)]
 mod test {
     use super::*;
+    use crate::repositories::pokemon::InMemoryRepository;
 
     #[test]
     fn it_should_return_the_pokemon_number_otherwise() {
-        let mut repo = Arc::new(InMemoryRepository::new());
+        let repo = Arc::new(InMemoryRepository::new());
         let number = 25;
         let req = Request::new(
             PokemonNumber::pikachu(),
@@ -68,7 +69,7 @@ mod test {
 
     #[test]
     fn it_should_return_a_bad_request_error_when_request_is_invalid() {
-        let mut repo = Arc::new(InMemoryRepository::new());
+        let repo = Arc::new(InMemoryRepository::new());
         let req = Request::new(
             PokemonNumber::pikachu(),
             PokemonName::bad(),
@@ -88,7 +89,7 @@ mod test {
         let number = PokemonNumber::try_from(25).unwrap();
         let name = PokemonName::try_from(String::from("Pikachu")).unwrap();
         let types = PokemonTypes::try_from(vec![String::from("Electric")]).unwrap();
-        let mut repo = Arc::new(InMemoryRepository::new());
+        let repo = Arc::new(InMemoryRepository::new());
         repo.insert(
             PokemonNumber::pikachu(),
             PokemonName::pikachu(),
@@ -111,7 +112,7 @@ mod test {
 
     #[test]
     fn it_should_return_an_unknown_error_when_an_unexpected_error_happens() {
-        let mut repo = Arc::new(InMemoryRepository::new().with_error());
+        let repo = Arc::new(InMemoryRepository::new().with_error());
         let number = 25;
         let req = Request::new(
             PokemonNumber::pikachu(),
