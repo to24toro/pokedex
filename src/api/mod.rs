@@ -1,8 +1,8 @@
 mod create_pokemon;
-mod fetch_all_pokemons;
-mod health;
-mod fetch_pokemon;
 mod delete_pokemon;
+mod fetch_all_pokemons;
+mod fetch_pokemon;
+mod health;
 
 use crate::repositories::pokemon::Repository;
 use std::sync::Arc;
@@ -41,7 +41,7 @@ enum Status {
 }
 
 impl From<Status> for rouille::Response {
-    fn from (status: Status) -> Self {
+    fn from(status: Status) -> Self {
         let status_code = match status {
             Status::Ok => 200,
             Status::BadRequest => 400,
@@ -49,6 +49,11 @@ impl From<Status> for rouille::Response {
             Status::Conflict => 409,
             Status::InternalServerError => 500,
         };
-        Self { status_code, headers: vec![], data: rouille::ResponseBody::empty(), upgrade: None }
+        Self {
+            status_code,
+            headers: vec![],
+            data: rouille::ResponseBody::empty(),
+            upgrade: None,
+        }
     }
 }

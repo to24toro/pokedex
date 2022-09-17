@@ -1,15 +1,14 @@
 use crate::repositories::pokemon::{FetchAllError, Repository};
 use std::sync::Arc;
 
-
-pub struct  Response {
+pub struct Response {
     pub number: u16,
     pub name: String,
     pub types: Vec<String>,
 }
 
 pub enum Error {
-    Unknown
+    Unknown,
 }
 
 pub fn execute(repo: Arc<dyn Repository>) -> Result<Vec<Response>, Error> {
@@ -19,7 +18,7 @@ pub fn execute(repo: Arc<dyn Repository>) -> Result<Vec<Response>, Error> {
             .map(|p| Response {
                 number: u16::from(p.number),
                 name: String::from(p.name),
-                types: Vec::<String>::from(p.types)
+                types: Vec::<String>::from(p.types),
             })
             .collect::<Vec<Response>>()),
         Err(FetchAllError::Unknown) => Err(Error::Unknown),
@@ -47,14 +46,14 @@ mod tests {
     fn it_should_return_all_the_pokemons_ordered_by_increasing_number_otherwise() {
         let repo = Arc::new(InMemoryRepository::new());
         repo.insert(
-            PokemonNumber::pikachu(), 
-            PokemonName::pikachu(), 
+            PokemonNumber::pikachu(),
+            PokemonName::pikachu(),
             PokemonTypes::pikachu(),
         )
         .ok();
         repo.insert(
-            PokemonNumber::charmander(), 
-            PokemonName::charmander(), 
+            PokemonNumber::charmander(),
+            PokemonName::charmander(),
             PokemonTypes::charmander(),
         )
         .ok();

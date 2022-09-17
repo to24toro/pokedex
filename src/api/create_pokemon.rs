@@ -1,7 +1,7 @@
 use crate::api::Status;
 // use crate::domain::create_pokemon;
-use crate::repositories::pokemon::Repository;
 use crate::domain::create_pokemon;
+use crate::repositories::pokemon::Repository;
 use rouille;
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -10,7 +10,7 @@ use std::sync::Arc;
 struct Request {
     number: u16,
     name: String,
-    types: Vec<String>
+    types: Vec<String>,
 }
 
 #[derive(Serialize)]
@@ -34,10 +34,13 @@ pub fn serve(repo: Arc<dyn Repository>, req: &rouille::Request) -> rouille::Resp
             number,
             name,
             types,
-        }) => rouille::Response::json(&Response { number, name, types, }),
+        }) => rouille::Response::json(&Response {
+            number,
+            name,
+            types,
+        }),
         Err(create_pokemon::Error::BadRequest) => rouille::Response::from(Status::BadRequest),
         Err(create_pokemon::Error::Conflict) => rouille::Response::from(Status::Conflict),
         Err(create_pokemon::Error::Unknown) => rouille::Response::from(Status::InternalServerError),
     }
-
 }

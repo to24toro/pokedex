@@ -1,5 +1,5 @@
 use crate::domain::entities::{Pokemon, PokemonName, PokemonNumber, PokemonTypes};
-use crate::repositories::pokemon::{InsertError,InMemoryRepository, Repository};
+use crate::repositories::pokemon::{InMemoryRepository, InsertError, Repository};
 use std::convert::TryFrom;
 use std::sync::Arc;
 
@@ -32,7 +32,11 @@ pub fn execute(repo: Arc<dyn Repository>, req: Request) -> Result<Response, Erro
                 number,
                 name,
                 types,
-            }) => Ok(Response { number: u16::from(number), name: String::from(name), types: Vec::<String>::from(types) }),
+            }) => Ok(Response {
+                number: u16::from(number),
+                name: String::from(name),
+                types: Vec::<String>::from(types),
+            }),
             Err(InsertError::Conflict) => Err(Error::Conflict),
             Err(InsertError::Unknown) => Err(Error::Unknown),
         },
@@ -79,7 +83,7 @@ mod test {
         let res = execute(repo, req);
 
         match res {
-            Err(Error::BadRequest)=> {}
+            Err(Error::BadRequest) => {}
             _ => unreachable!(),
         }
     }
@@ -123,7 +127,7 @@ mod test {
         let res = execute(repo, req);
 
         match res {
-            Err(Error::Unknown)=> {}
+            Err(Error::Unknown) => {}
             _ => unreachable!(),
         };
     }
